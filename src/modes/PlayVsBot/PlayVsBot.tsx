@@ -27,6 +27,7 @@ export function PlayVsBot() {
     fen,
     status,
     sanHistory,
+    verboseHistory,
     capturedPieces,
     canUndo,
     makeMove,
@@ -36,6 +37,9 @@ export function PlayVsBot() {
 
   const gameOver = status.isGameOver || resigned;
   const playerTurn = Boolean(config) && game.turn() === config!.color && !gameOver;
+  // Only enable takeback once the player has actually made a move — otherwise there's
+  // nothing of theirs to take back, and undoing would just re-roll the bot's opening move.
+  const canTakeback = canUndo && playerTurn && verboseHistory.some((m) => m.color === config?.color);
 
   // Configure engine strength whenever a new game starts.
   useEffect(() => {
@@ -92,7 +96,7 @@ export function PlayVsBot() {
   }
 
   function handleTakeback() {
-    if (!canUndo || isBotThinking) return;
+    if (!canTakeback || isBotThinking) return;
     undo();
     undo();
   }
@@ -159,7 +163,7 @@ export function PlayVsBot() {
             <button className="btn btn-sm" onClick={() => setOrientation((o) => (o === 'white' ? 'black' : 'white'))}>
               Flip board
             </button>
-            <button className="btn btn-sm" onClick={handleTakeback} disabled={!canUndo || isBotThinking}>
+            <button className="btn btn-sm" onClick={handleTakeback} disabled={!canTakeback || isBotThinking}>
               Takeback
             </button>
             <button className="btn btn-sm" onClick={handleHint} disabled={!playerTurn || hintLoading}>

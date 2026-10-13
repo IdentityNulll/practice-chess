@@ -21,6 +21,10 @@ interface BeforeMoveSnapshot {
   info: EngineEvalInfo;
 }
 
+/** Stands in for a real search when the position is already checkmate — there's nothing left to search,
+ * and classifyMove() detects checkmate directly from the board rather than from this eval anyway. */
+const EMPTY_EVAL: EngineEvalInfo = { depth: 0, cp: null, mate: null, bestMoveUci: null, pvUci: [], multipv: [] };
+
 export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: UseSpeech; onExit: () => void }) {
   const [config, setConfig] = useState<BotGameConfig | null>(null);
   const [orientation, setOrientation] = useState<'white' | 'black'>('white');
@@ -35,10 +39,13 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
   // player's moves stay accurate regardless of how weak the opponent is.
   const { engineRef: botEngineRef, isReady: botReady } = useStockfishEngine();
   const { engineRef: analysisEngineRef, isReady: analysisReady } = useStockfishEngine();
-  const { game, fen, status, sanHistory, capturedPieces, canUndo, makeMove, undo, reset } = useChessGame();
+  const { game, fen, status, sanHistory, verboseHistory, capturedPieces, canUndo, makeMove, undo, reset } = useChessGame();
 
   const gameOver = status.isGameOver || resigned;
   const playerTurn = Boolean(config) && game.turn() === config!.color && !gameOver;
+  // Only enable takeback once the player has actually made a move — otherwise there's
+  // nothing of theirs to take back, and undoing would just re-roll the bot's opening move.
+  const canTakeback = canUndo && playerTurn && verboseHistory.some((m) => m.color === config?.color);
 
   useEffect(() => {
     if (!config || !botReady || !botEngineRef.current) return;
@@ -70,10 +77,15 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
     };
   }, [fen, config, analysisReady, resigned, status.isGameOver, analysisEngineRef, game]);
 
-  // The bot's turn: analyze the player's move that just happened (full-strength
-  // engine), speak a line, then let the Elo-limited engine pick the bot's reply.
+  // The bot's turn (or the game just ended on the player's move): analyze the
+  // player's move that just happened with the full-strength engine and speak a
+  // line, then — only if the game is still going — let the Elo-limited engine
+  // pick the bot's reply. Gated on `resigned` but deliberately NOT on
+  // `status.isGameOver`: if the player's move was checkmate, the position still
+  // needs analyzing (so the coach can react to it) even though there's no bot
+  // move left to make.
   useEffect(() => {
-    if (!config || !botReady || resigned || status.isGameOver) return;
+    if (!config || !botReady || resigned) return;
     if (game.turn() === config.color) return;
     const botEngine = botEngineRef.current;
     if (!botEngine) return;
@@ -82,20 +94,27 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
     const shouldAnalyze = lastMove?.color === config.color;
     const snapshot = beforeSnapshotRef.current;
     const analysisEngine = analysisEngineRef.current;
+    const gameJustEnded = status.isGameOver;
 
     let cancelled = false;
-    setIsBotThinking(true);
+    setIsBotThinking(!gameJustEnded);
 
     const analysisPromise =
-      shouldAnalyze && snapshot && analysisEngine
-        ? (() => {
-            analysisEngine.setPositionFen(fen);
-            return analysisEngine.go({ movetimeMs: 700, multipv: 1 });
-          })()
+      shouldAnalyze && snapshot
+        ? gameJustEnded || !analysisEngine
+          ? Promise.resolve(EMPTY_EVAL)
+          : (() => {
+              analysisEngine.setPositionFen(fen);
+              return analysisEngine.go({ movetimeMs: 700, multipv: 1 });
+            })()
         : Promise.resolve(null);
 
-    botEngine.setPositionFen(fen);
-    const botPromise = botEngine.go({ movetimeMs: moveTimeForElo(config.elo), multipv: 3 });
+    const botPromise = gameJustEnded
+      ? Promise.resolve(null)
+      : (() => {
+          botEngine.setPositionFen(fen);
+          return botEngine.go({ movetimeMs: moveTimeForElo(config.elo), multipv: 3 });
+        })();
 
     Promise.all([analysisPromise, botPromise])
       .then(([evalAfter, botResult]) => {
@@ -114,8 +133,10 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
           speech.sayAs(coach.voice, line.text);
         }
 
-        const moveUci = pickBotMove(botResult, config.elo) ?? botResult.bestMoveUci;
-        if (moveUci) makeMove(uciToMove(moveUci));
+        if (botResult) {
+          const moveUci = pickBotMove(botResult, config.elo) ?? botResult.bestMoveUci;
+          if (moveUci) makeMove(uciToMove(moveUci));
+        }
       })
       .finally(() => {
         if (!cancelled) setIsBotThinking(false);
@@ -137,7 +158,7 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
   }
 
   function handleTakeback() {
-    if (!canUndo || isBotThinking) return;
+    if (!canTakeback || isBotThinking) return;
     setCommentary(null);
     undo();
     undo();
@@ -193,7 +214,7 @@ export function CoachedGame({ coach, speech, onExit }: { coach: Coach; speech: U
           <button className="btn btn-sm" onClick={() => setOrientation((o) => (o === 'white' ? 'black' : 'white'))}>
             Flip board
           </button>
-          <button className="btn btn-sm" onClick={handleTakeback} disabled={!canUndo || isBotThinking}>
+          <button className="btn btn-sm" onClick={handleTakeback} disabled={!canTakeback || isBotThinking}>
             Takeback
           </button>
           <button className="btn btn-danger btn-sm" onClick={() => setResigned(true)} disabled={gameOver}>
