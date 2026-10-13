@@ -1,0 +1,32 @@
+.eval-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  height: 100%;
+}
+
+.eval-bar-track {
+  width: 1.4rem;
+  flex: 1;
+  background: #1c1e26;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 160px;
+}
+
+.eval-bar-white {
+  background: #e9edf5;
+  width: 100%;
+  transition: height 300ms ease;
+}
+
+.eval-bar-label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: var(--mono, ui-monospace, monospace);
+}

@@ -1,0 +1,113 @@
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lessons-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.lessons-progress-note {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.lesson-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  position: relative;
+  border: 1px solid var(--border);
+}
+
+.lesson-card:hover {
+  border-color: var(--accent);
+}
+
+.lesson-category {
+  align-self: flex-start;
+}
+
+.lesson-done {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  color: var(--good);
+  font-weight: 700;
+}
+
+.lesson-card p {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.lesson-runner {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lr-board-col {
+  flex: 1 1 420px;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.lr-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.lr-side-col {
+  flex: 1 1 260px;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lr-coach-panel {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  min-height: 6rem;
+}
+
+.lr-feedback-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lr-feedback {
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.lr-feedback-success {
+  color: var(--good);
+}
+
+.lr-feedback-error {
+  color: var(--bad);
+}
+
+.lr-hint {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}

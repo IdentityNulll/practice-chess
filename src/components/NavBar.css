@@ -1,0 +1,70 @@
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elevated);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.25rem;
+}
+
+.nav-brand-mark {
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.nav-tab:hover {
+  background: var(--bg-elevated-2);
+  color: var(--text);
+}
+
+.nav-tab-active {
+  background: var(--bg-elevated-2);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+@media (max-width: 520px) {
+  .nav-tab-label {
+    display: none;
+  }
+  .nav-tab {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+}

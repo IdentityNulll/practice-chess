@@ -1,0 +1,54 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+.home-intro {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.home-intro h1 {
+  font-size: 2rem;
+}
+
+.home-tagline {
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.home-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.home-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--border);
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.home-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.home-card-emoji {
+  font-size: 1.8rem;
+}
+
+.home-card p {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}

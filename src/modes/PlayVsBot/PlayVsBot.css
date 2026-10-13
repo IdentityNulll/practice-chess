@@ -1,0 +1,48 @@
+.play-vs-bot {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pvb-board-col {
+  flex: 1 1 480px;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pvb-status-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pvb-side-col {
+  flex: 1 1 280px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pvb-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pvb-captured {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pvb-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}

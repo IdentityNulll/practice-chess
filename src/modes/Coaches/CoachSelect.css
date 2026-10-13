@@ -1,0 +1,45 @@
+.coach-select {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.coach-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+.coach-card {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  border: 1px solid var(--border);
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.coach-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.coach-avatar {
+  font-size: 2.2rem;
+}
+
+.coach-tagline {
+  color: var(--accent);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.coach-personality {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}

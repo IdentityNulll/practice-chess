@@ -1,0 +1,61 @@
+.level-picker {
+  max-width: 420px;
+  margin: 1.5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.level-presets {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.level-preset-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  align-items: center;
+  padding: 0.6rem;
+}
+
+.level-preset-btn span {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.level-preset-description {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  min-height: 2.2em;
+}
+
+.level-slider-label {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.level-color-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.level-color-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.level-start-btn {
+  margin-top: 0.4rem;
+  padding: 0.7rem;
+  font-size: 1rem;
+}

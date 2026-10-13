@@ -1,0 +1,33 @@
+.voice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.voice-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.voice-mute {
+  flex-direction: row;
+  align-items: center;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.voice-row select {
+  background: var(--bg-elevated-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.4rem;
+  color: var(--text);
+}
+
+.voice-unsupported {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}

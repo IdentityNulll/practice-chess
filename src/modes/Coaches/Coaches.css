@@ -1,0 +1,49 @@
+.coaches-shell {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.coaches-main {
+  flex: 1 1 560px;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.coaches-side {
+  flex: 1 1 260px;
+  max-width: 300px;
+}
+
+.coach-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.coach-banner h2 {
+  font-size: 1.1rem;
+}
+
+.coach-avatar-sm {
+  font-size: 2rem;
+}
+
+.coach-change-btn {
+  margin-left: auto;
+}
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.activity-btn {
+  padding: 1.2rem;
+  font-size: 1rem;
+}
